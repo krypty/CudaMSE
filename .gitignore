@@ -1,0 +1,62 @@
+*.pydevproject
+.metadata
+.gradle
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+# Eclipse Core
+.project
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# TeXlipse plugin
+.texlipse
+
+# CUDA
+BilatTools_CPP/
+BilatTools_Cuda/
+BilatTools_Cuda_Image/
+BilatTools_Cuda_smart_switch/
+BilatTools_Image/
+BilatTools_OMP/
+BilatTools_OpenCV/
+BilatTools_V4L_Linux/
+BUILDER/
+BUILDER_API/
+BUILDER_Symlink/
+JavaTrucBase/
+RELEASE/
+Tuto_Boost/
+Tuto_CppTest/
+Tuto_Doxy/
+Tuto_Graphe_GL/
+Tuto_Image/
+Tuto_Image_Cuda/
+Tuto_NameSpaces/
+.recommenders/
