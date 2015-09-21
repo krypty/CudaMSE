@@ -47,8 +47,8 @@ Rippling::Rippling(int w, int h, float dt)
     this->dt = dt;
 
     // Tools
-    //this->dg = // TODO
-    //this->db = // TODO
+    this->dg = dim3(96, 2, 1);
+    this->db = dim3(128, 4, 1);
     this->t = 0;
 
     // Outputs
@@ -73,7 +73,7 @@ Rippling::~Rippling()
  */
 void Rippling::process(uchar4* ptrDevPixels, int w, int h)
     {
-    // TODO lancer le kernel avec <<<dg,db>>>
+    rippling<<<dg, db>>>(ptrDevPixels, w, h, t);
     }
 
 
@@ -82,7 +82,7 @@ void Rippling::process(uchar4* ptrDevPixels, int w, int h)
  */
 void Rippling::animationStep()
     {
-    // TODO
+    this->t += this->dt;
     }
 
 /*--------------*\

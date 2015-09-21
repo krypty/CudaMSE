@@ -40,7 +40,7 @@ class RipplingMath
 	void colorIJ(int i, int j, float t, uchar4* ptrColor)
 	    {
 	    uchar levelGris;
-	    f(i, j, &levelGris);
+	    f(i, j, t, &levelGris);
 
 	    ptrColor->x = levelGris;
 	    ptrColor->y = levelGris;
@@ -52,18 +52,25 @@ class RipplingMath
     private:
 
 	__device__
-	void f(int i, int j, uchar* ptrLevelGris)
+	void f(int i, int j, float t, uchar* ptrLevelGris)
 	    {
 	    //TODO:
 	    // Step1 : Delete le contenur de ce fichier (si!),
 	    // Step2 : Copie-past le contenu de RipplingMath.h de omp,
 	    // Step3 : Ajouter __device__  devant methode et constructeur!
+
+	    float dijResult;
+	    dij(i,j, &dijResult);
+
+	    *ptrLevelGris = 128 + 127 * ((cos((dijResult/(10.0))-(t/7.0))) / ((dijResult/10.0)+1));
 	    }
 
 	__device__
 	void dij(int i, int j, float* ptrResult)
 	    {
-	    //TODO cf todo ci-dessus
+	    float fi = i - this->dim2;
+	    float fj = j - this->dim2;
+	    *ptrResult = sqrt(fi*fi + fj*fj);
 	    }
 
 	/*--------------------------------------*\
