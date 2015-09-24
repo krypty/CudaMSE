@@ -46,8 +46,23 @@ bool isPiOMPforAtomic_Ok(int n)
  */
 double piOMPforAtomic(int n)
     {
-   //TODO
-    return -1;
+    double somme = 0;
+    double dx = 1.0/(double)n;
+    double x;
+
+    // V2
+    #pragma omp parallel for private (x)
+	for(int i = 0; i < n; i++)
+	    {
+	    // V1 : double x = ....
+	    x = i * dx;
+
+	    // pas bon ! n * NB_THREAD / NB_THREAD
+	    // mais quand meme meilleur que critical for car fpi(x) est fait en parallel et += séquentiellement
+	#pragma omp atomic
+		somme += fpi(x);
+	    }
+	return somme/n;
     }
 
 /*----------------------------------------------------------------------*\
