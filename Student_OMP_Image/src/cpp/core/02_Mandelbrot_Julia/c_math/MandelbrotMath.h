@@ -27,10 +27,10 @@ class MandelbrotMath
 	/**
 	 * calibreurColor : transformation affine entre [-1,1] (l'output de f(x,y)) et [0,1] (le spectre hsb)
 	 */
-	MandelbrotMath(int n) :
+	MandelbrotMath() :
 		calibreur(IntervalF(-1, 1), IntervalF(0, 1))
 	    {
-	    this->n = n;
+	    //this->n = n;
 	    }
 
 	virtual ~MandelbrotMath(void)
@@ -44,23 +44,51 @@ class MandelbrotMath
 
     public:
 
-	void colorXY(uchar4* ptrColor, double x, double y, const DomaineMath& domaineMath, double t)
+	void colorXY(uchar4* ptrColor, double x, double y, const DomaineMath& domaineMath, const int N)
 	    {
-	    float z = f(x, y, t);
+	    int k = f(x, y, N);
 
-	    calibreur.calibrer(z);
-	    float hue01 = z;
+	    if(k <= N)
+		{
+		// on scale le k sur la plage du hue [0, 1]. Siimilaire à un calibreur
+		float hue01 = (1.0/N) * k;
 
-	    ColorTools::HSB_TO_RVB(hue01, ptrColor); // update color
+		ColorTools::HSB_TO_RVB(hue01, ptrColor); // update color
+		}
+	    else
+		{
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
+		}
 
 	    ptrColor->w = 255; // opaque
 	    }
 
     private:
 
-	double f(double x, double y, double t)
+	bool isDivergent(float a, float b)
 	    {
-	    return sin(x * n + t) * cos(y * n + t); // t para animation
+	    return (a*a + b*b) > 4;
+	    }
+
+	int f(double x, double y, int N)
+	    {
+	    float a = 0;
+	    float b = 0;
+
+	    int k = 0;
+
+	    while(!isDivergent(a, b) && k <= N)
+		{
+		float aCopy = a;
+		a = (aCopy*aCopy - b*b) + x;
+		b = 2.0 * aCopy * b + y;
+
+		k++;
+		}
+
+	    return k;
 	    }
 
 	/*--------------------------------------*\

@@ -4,7 +4,7 @@
 #include "cudaType.h"
 #include "AnimableFonctionel_I.h"
 
-#include "VariateurF.h"
+#include "VariateurI.h"
 #include "MandelbrotMath.h" // car use dans .h
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -22,7 +22,7 @@ class MandelbrotMOO: public AnimableFonctionel_I
 
     public:
 
-	MandelbrotMOO(unsigned int w, unsigned int h, float dt, int n);
+	MandelbrotMOO(unsigned int w, unsigned int h, int nMin, int nMax);
 	virtual ~MandelbrotMOO(void);
 
 	/*--------------------------------------*\
@@ -66,7 +66,6 @@ class MandelbrotMOO: public AnimableFonctionel_I
     protected:
 
 	// Inputs
-	int n;
 	unsigned int w;
 	unsigned int h;
 	DomaineMath domaineMathInit;
@@ -75,7 +74,7 @@ class MandelbrotMOO: public AnimableFonctionel_I
 	string title;
 
 	// Tools
-	VariateurF variateurT; // fait varier para animation t
+	VariateurI variateurN; // fait varier para animation t
 	ParallelPatern parallelPatern;
     };
 

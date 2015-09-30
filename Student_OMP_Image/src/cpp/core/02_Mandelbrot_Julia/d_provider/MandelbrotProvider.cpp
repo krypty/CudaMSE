@@ -42,12 +42,10 @@ AnimableFonctionel_I* MandelbrotProvider::createMOO(void)
     int dw = 16 * 60 *2; // =32*30=960
     int dh = 16 * 60; // =32*30=960
 
-    int n = 2;
+    int nMin = 30;
+    int nMax = 100;
 
-    // animation para
-    float dt = 2 * PI / 400;
-
-    return new MandelbrotMOO(dw, dh, dt, n);
+    return new MandelbrotMOO(dw, dh, nMin, nMax);
     }
 
 /*--------------------------------------*\

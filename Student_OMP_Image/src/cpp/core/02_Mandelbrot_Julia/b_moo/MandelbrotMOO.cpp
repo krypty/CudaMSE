@@ -37,13 +37,12 @@ using std::string;
  * variateurT: 	fait varier t in [0,2pi] par increment de dt,
  * 		d'abord de mani�re croissante jusqua 2PI, puis de maniere decroissante jusqua 0, puis en boucle a l'infini selon ce procede
  */
-MandelbrotMOO::MandelbrotMOO(unsigned int w, unsigned int h, float dt, int n):variateurT(IntervalF(0, 2 * PI), dt)
+MandelbrotMOO::MandelbrotMOO(unsigned int w, unsigned int h, int nMin, int nMax):variateurN(IntervalI(nMin, nMax), 1)
     {
     // Inputs
-    this->n =n;
     this->w=w;
     this->h=h;
-    this->domaineMathInit=DomaineMath(0, 0, 2 * PI, 2 * PI);
+    this->domaineMathInit=DomaineMath(-2.1, -1.3, 0.8, 1.3);
 
     // Outputs
     this->title="Mandelbrot_OMP (Zoomable)";
@@ -108,7 +107,7 @@ void MandelbrotMOO::process(uchar4* ptrTabPixels, int w, int h, const DomaineMat
  */
 void MandelbrotMOO::animationStep()
     {
-    variateurT.varierAndGet();
+    variateurN.varierAndGet();
     }
 
 /*--------------*\
@@ -120,7 +119,7 @@ void MandelbrotMOO::animationStep()
  */
 float MandelbrotMOO::getAnimationPara()
     {
-    return variateurT.get();
+    return variateurN.get();
     }
 
 /**
@@ -175,7 +174,7 @@ void MandelbrotMOO::setParallelPatern(ParallelPatern parallelPatern)
  */
 void MandelbrotMOO::forAutoOMP(uchar4* ptrTabPixels, int w, int h, const DomaineMath& domaineMath)
     {
-    MandelbrotMath mandelbrotMath(n); // ici pour preparer cuda
+    MandelbrotMath mandelbrotMath; // ici pour preparer cuda
 
 #pragma omp parallel for
     for (int i = 0; i < h; i++)
@@ -195,7 +194,7 @@ void MandelbrotMOO::forAutoOMP(uchar4* ptrTabPixels, int w, int h, const Domaine
  */
 void MandelbrotMOO::entrelacementOMP(uchar4* ptrTabPixels, int w, int h, const DomaineMath& domaineMath)
     {
-    MandelbrotMath mandelbrotMath(n); // ici pour preparer cuda
+    MandelbrotMath mandelbrotMath; // ici pour preparer cuda
 
     const int WH=w*h;
 
@@ -240,8 +239,8 @@ void MandelbrotMOO::workPixel(uchar4* ptrColorIJ,int i, int j,int s, const Domai
 
     domaineMath.toXY(i, j, &x, &y); // fill (x,y) from (i,j)
 
-    float t=variateurT.get();
-    ptrMandelbrotMath->colorXY(ptrColorIJ,x, y, domaineMath,t); // in [01]
+    float n = variateurN.get();
+    ptrMandelbrotMath->colorXY(ptrColorIJ,x, y, domaineMath, n); // in [01]
     }
 
 /*----------------------------------------------------------------------*\
