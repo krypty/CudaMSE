@@ -1,8 +1,9 @@
-#ifndef MANDELBROT_MATH_H_
-#define MANDELBROT_MATH_H_
+#ifndef JULIA_MATH_H_
+#define JULIA_MATH_H_
 
 #include "CalibreurF.h"
 #include "ColorTools.h"
+#include "MandelbrotMath.h"
 #include <math.h>
 
 /*----------------------------------------------------------------------*\
@@ -16,7 +17,7 @@
 /**
  * Dans un header only pour preparer la version cuda
  */
-class MandelbrotMath
+class JuliaMath : public MandelbrotMath
     {
 	/*--------------------------------------*\
 	 |*		Constructeur		*|
@@ -27,13 +28,13 @@ class MandelbrotMath
 	/**
 	 * calibreurColor : transformation affine entre [-1,1] (l'output de f(x,y)) et [0,1] (le spectre hsb)
 	 */
-	MandelbrotMath() :
-		calibreur(IntervalF(-1, 1), IntervalF(0, 1))
+	JuliaMath(float c1, float c2) : MandelbrotMath()
 	    {
-	    // nothing
+	    this->c1 = c1;
+	    this->c2 = c2;
 	    }
 
-	virtual ~MandelbrotMath(void)
+	virtual ~JuliaMath(void)
 	    {
 	    // nothing
 	    }
@@ -42,43 +43,20 @@ class MandelbrotMath
 	|*		Methode			*|
 	 \*-------------------------------------*/
 
-    public:
-
-	void colorXY(uchar4* ptrColor, double x, double y, const DomaineMath& domaineMath, const int N)
-	    {
-	    int k = getK(x, y, N);
-
-	    if(k <= N)
-		{
-		// on scale le k sur la plage du hue [0, 1]. Siimilaire à un calibreur
-		float hue01 = (1.0/N) * k;
-
-		ColorTools::HSB_TO_RVB(hue01, ptrColor); // update color
-		}
-	    else
-		{
-		ptrColor->x = 0;
-		ptrColor->y = 0;
-		ptrColor->z = 0;
-		}
-
-	    ptrColor->w = 255; // opaque
-	    }
-
     protected:
 
-	virtual int getK(double x, double y, int N)
+	int getK(double x, double y, int N)
 		    {
-		    float a = 0;
-		    float b = 0;
+		    float a = x;
+		    float b = y;
 
 		    int k = 0;
 
 		    while(!isDivergent(a, b) && k <= N)
 			{
 			float aCopy = a;
-			a = (aCopy*aCopy - b*b) + x;
-			b = 2.0 * aCopy * b + y;
+			a = (aCopy*aCopy - b*b) + c1;
+			b = 2.0 * aCopy * b + c2;
 
 			k++;
 			}
@@ -86,20 +64,14 @@ class MandelbrotMath
 		    return k;
 		    }
 
-	bool isDivergent(float a, float b)
-	    {
-	    return (a*a + b*b) > 4;
-	    }
-
 	/*--------------------------------------*\
-	|*		Attribut		*|
+	|*		Attributs		*|
 	 \*-------------------------------------*/
 
-    protected:
+    private:
 
-	// Tools
-	CalibreurF calibreur;
-
+	double c1;
+	double c2;
     }
 ;
 

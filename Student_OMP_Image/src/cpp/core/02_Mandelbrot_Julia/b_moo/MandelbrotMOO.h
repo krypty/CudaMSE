@@ -59,6 +59,8 @@ class MandelbrotMOO: public AnimableFonctionel_I
 
 	void workPixel(uchar4* ptrColorIJ, int i, int j, int s, const DomaineMath& domaineMath, MandelbrotMath* ptrMandelbrotMath);
 
+	MandelbrotMath* createMath();
+
 	/*--------------------------------------*\
 	|*		Attribut		*|
 	 \*-------------------------------------*/

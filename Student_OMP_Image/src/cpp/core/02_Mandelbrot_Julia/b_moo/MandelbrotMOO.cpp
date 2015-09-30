@@ -7,6 +7,7 @@
 #include "MathTools.h"
 
 #include "IndiceTools.h"
+#include "JuliaMath.h"
 
 
 using std::cout;
@@ -42,7 +43,8 @@ MandelbrotMOO::MandelbrotMOO(unsigned int w, unsigned int h, int nMin, int nMax)
     // Inputs
     this->w=w;
     this->h=h;
-    this->domaineMathInit=DomaineMath(-2.1, -1.3, 0.8, 1.3);
+    //this->domaineMathInit=DomaineMath(-2.1, -1.3, 0.8, 1.3); // Mandelbrot
+    this->domaineMathInit=DomaineMath(-1.3, -1.4, 1.4, 1.3); // Mandelbrot
 
     // Outputs
     this->title="Mandelbrot_OMP (Zoomable)";
@@ -174,7 +176,8 @@ void MandelbrotMOO::setParallelPatern(ParallelPatern parallelPatern)
  */
 void MandelbrotMOO::forAutoOMP(uchar4* ptrTabPixels, int w, int h, const DomaineMath& domaineMath)
     {
-    MandelbrotMath mandelbrotMath; // ici pour preparer cuda
+    //MandelbrotMath mandelbrotMath; // ici pour preparer cuda
+    MandelbrotMath *mandelbrotMath = createMath();
 
 #pragma omp parallel for
     for (int i = 0; i < h; i++)
@@ -184,7 +187,7 @@ void MandelbrotMOO::forAutoOMP(uchar4* ptrTabPixels, int w, int h, const Domaine
 	    //int s = i * W + j;
 	    int s=IndiceTools::toS(w,i,j);// i[0,H[ j[0,W[  --> s[0,W*H[
 
-	    workPixel(&ptrTabPixels[s],i, j,s, domaineMath,&mandelbrotMath);
+	    workPixel(&ptrTabPixels[s],i, j,s, domaineMath, mandelbrotMath);
 	    }
 	}
     }
@@ -194,7 +197,8 @@ void MandelbrotMOO::forAutoOMP(uchar4* ptrTabPixels, int w, int h, const Domaine
  */
 void MandelbrotMOO::entrelacementOMP(uchar4* ptrTabPixels, int w, int h, const DomaineMath& domaineMath)
     {
-    MandelbrotMath mandelbrotMath; // ici pour preparer cuda
+    //MandelbrotMath mandelbrotMath; // ici pour preparer cuda
+    MandelbrotMath *mandelbrotMath = createMath();
 
     const int WH=w*h;
 
@@ -211,7 +215,7 @@ void MandelbrotMOO::entrelacementOMP(uchar4* ptrTabPixels, int w, int h, const D
 	    {
 	    IndiceTools::toIJ(s,w,&i,&j); // s[0,W*H[ --> i[0,H[ j[0,W[
 
-	    workPixel(&ptrTabPixels[s],i, j,s, domaineMath,&mandelbrotMath);
+	    workPixel(&ptrTabPixels[s],i, j,s, domaineMath, mandelbrotMath);
 
 	    s += NB_THREAD;
 	    }
@@ -241,6 +245,12 @@ void MandelbrotMOO::workPixel(uchar4* ptrColorIJ,int i, int j,int s, const Domai
 
     float n = variateurN.get();
     ptrMandelbrotMath->colorXY(ptrColorIJ,x, y, domaineMath, n); // in [01]
+    }
+
+MandelbrotMath* MandelbrotMOO::createMath()
+    {
+    //return MandelbrotMath();
+    return new JuliaMath(-0.12, 0.85);
     }
 
 /*----------------------------------------------------------------------*\
