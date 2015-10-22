@@ -1,18 +1,5 @@
-#include <iostream>
-#include <stdlib.h>
-#include <string.h>
-
-#include "GLUTImageViewers.h"
-#include "Option.h"
-#include "Viewer.h"
-#include "ViewerZoomable.h"
-
-#include "RipplingProvider.h"
 #include "MandelbrotProvider.h"
-
-using std::cout;
-using std::endl;
-using std::string;
+#include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -26,8 +13,6 @@ using std::string;
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainGL(Option& option);
-
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
@@ -40,20 +25,28 @@ int mainGL(Option& option);
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainGL(Option& option)
+/*-----------------*\
+ |*	static	   *|
+ \*----------------*/
+
+Mandelbrot* MandelbrotProvider::create()
     {
-    cout << "\n[OpenGL] mode" << endl;
+    int dw = 16 * 60 *2 ; // =32*30=960
+    int dh = 16 * 60; // =32*30=960
 
-    GLUTImageViewers::init(option.getArgc(), option.getArgv());
+    float dt = 2 * PI / 8000;
 
-    // Viewer : (int,int,boolean) : (px,py,isAnimation=true)
-    //Viewer<RipplingProvider> rippling(10, 10);
-    Viewer<MandelbrotProvider> mandelbrot(10, 10);
-    // add here other viewer
+    int nMin = 30;
+    int nMax = 100;
 
-    GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
+    return new Mandelbrot(dw, dh, nMin, nMax);
+    }
 
-    return EXIT_SUCCESS;
+ImageFonctionel* MandelbrotProvider::createGL(void)
+    {
+    ColorRGB_01* ptrColorTitre=new ColorRGB_01(0,0,0);
+
+    return new ImageFonctionel(create(),ptrColorTitre); // both ptr destroy by destructor of ImageFonctionel
     }
 
 /*--------------------------------------*\
@@ -63,4 +56,3 @@ int mainGL(Option& option)
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
-
