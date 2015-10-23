@@ -9,7 +9,6 @@
 #include "IndiceTools.h"
 #include "JuliaMath.h"
 
-
 using std::cout;
 using std::endl;
 using std::string;
@@ -38,23 +37,31 @@ using std::string;
  * variateurT: 	fait varier t in [0,2pi] par increment de dt,
  * 		d'abord de mani�re croissante jusqua 2PI, puis de maniere decroissante jusqua 0, puis en boucle a l'infini selon ce procede
  */
-MandelbrotMOO::MandelbrotMOO(unsigned int w, unsigned int h, int nMin, int nMax):variateurN(IntervalI(nMin, nMax), 1)
+MandelbrotMOO::MandelbrotMOO(unsigned int w, unsigned int h)
     {
     // Inputs
-    this->w=w;
-    this->h=h;
-    //this->domaineMathInit=DomaineMath(-2.1, -1.3, 0.8, 1.3); // Mandelbrot
-    this->domaineMathInit=DomaineMath(-1.3, -1.4, 1.4, 1.3); // Mandelbrot
+    this->w = w;
+    this->h = h;
 
-    // Outputs
-    this->title="Mandelbrot_OMP (Zoomable)";
+    /* décommenter un des ces exemples pour changer de fractal (Mandelbrot ou Julia)
+     Ces exemples correspondent au PDF 06_TP_MandelBrot_Julia_006.pdf.
+     */
+//    initFractalEx1();
+//    initFractalEx2();
+//    initFractalEx3();
+//    initFractalEx4();
+    initFractalEx5();
+
+// Outputs
+    this->title = "Mandelbrot_OMP (Zoomable)";
 
     // Tools
-    this->parallelPatern=OMP_MIXTE;
+    this->parallelPatern = OMP_MIXTE;
 
     // OMP (facultatif)
     const int NB_THREADS = OmpTools::setAndGetNaturalGranularity();
-    cout << "\n[Mandelbrot] nbThread = " << NB_THREADS << endl;;
+    cout << "\n[Mandelbrot] nbThread = " << NB_THREADS << endl;
+    ;
     }
 
 MandelbrotMOO::~MandelbrotMOO(void)
@@ -109,7 +116,7 @@ void MandelbrotMOO::process(uchar4* ptrTabPixels, int w, int h, const DomaineMat
  */
 void MandelbrotMOO::animationStep()
     {
-    variateurN.varierAndGet();
+    variateurN->varierAndGet();
     }
 
 /*--------------*\
@@ -121,7 +128,7 @@ void MandelbrotMOO::animationStep()
  */
 float MandelbrotMOO::getAnimationPara()
     {
-    return variateurN.get();
+    return variateurN->get();
     }
 
 /**
@@ -162,22 +169,18 @@ DomaineMath* MandelbrotMOO::getDomaineMathInit(void)
 
 void MandelbrotMOO::setParallelPatern(ParallelPatern parallelPatern)
     {
-    this->parallelPatern=parallelPatern;
+    this->parallelPatern = parallelPatern;
     }
-
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
-
 
 /**
  * Code naturel et direct OMP
  */
 void MandelbrotMOO::forAutoOMP(uchar4* ptrTabPixels, int w, int h, const DomaineMath& domaineMath)
     {
-    //MandelbrotMath mandelbrotMath; // ici pour preparer cuda
-    MandelbrotMath *mandelbrotMath = createMath();
 
 #pragma omp parallel for
     for (int i = 0; i < h; i++)
@@ -185,9 +188,9 @@ void MandelbrotMOO::forAutoOMP(uchar4* ptrTabPixels, int w, int h, const Domaine
 	for (int j = 0; j < w; j++)
 	    {
 	    //int s = i * W + j;
-	    int s=IndiceTools::toS(w,i,j);// i[0,H[ j[0,W[  --> s[0,W*H[
+	    int s = IndiceTools::toS(w, i, j); // i[0,H[ j[0,W[  --> s[0,W*H[
 
-	    workPixel(&ptrTabPixels[s],i, j,s, domaineMath, mandelbrotMath);
+	    workPixel(&ptrTabPixels[s], i, j, s, domaineMath, mandelbrotMath);
 	    }
 	}
     }
@@ -197,10 +200,7 @@ void MandelbrotMOO::forAutoOMP(uchar4* ptrTabPixels, int w, int h, const Domaine
  */
 void MandelbrotMOO::entrelacementOMP(uchar4* ptrTabPixels, int w, int h, const DomaineMath& domaineMath)
     {
-    //MandelbrotMath mandelbrotMath; // ici pour preparer cuda
-    MandelbrotMath *mandelbrotMath = createMath();
-
-    const int WH=w*h;
+    const int WH = w * h;
 
 #pragma omp parallel
 	{
@@ -213,9 +213,9 @@ void MandelbrotMOO::entrelacementOMP(uchar4* ptrTabPixels, int w, int h, const D
 	int j;
 	while (s < WH)
 	    {
-	    IndiceTools::toIJ(s,w,&i,&j); // s[0,W*H[ --> i[0,H[ j[0,W[
+	    IndiceTools::toIJ(s, w, &i, &j); // s[0,W*H[ --> i[0,H[ j[0,W[
 
-	    workPixel(&ptrTabPixels[s],i, j,s, domaineMath, mandelbrotMath);
+	    workPixel(&ptrTabPixels[s], i, j, s, domaineMath, mandelbrotMath);
 
 	    s += NB_THREAD;
 	    }
@@ -233,7 +233,7 @@ void MandelbrotMOO::entrelacementOMP(uchar4* ptrTabPixels, int w, int h, const D
  * 	entrelacementOMP
  * 	forAutoOMP
  */
-void MandelbrotMOO::workPixel(uchar4* ptrColorIJ,int i, int j,int s, const DomaineMath& domaineMath,MandelbrotMath* ptrMandelbrotMath)
+void MandelbrotMOO::workPixel(uchar4* ptrColorIJ, int i, int j, int s, const DomaineMath& domaineMath, MandelbrotMath* ptrMandelbrotMath)
     {
     // (i,j) domaine ecran dans N2
     // (x,y) domaine math dans R2
@@ -243,14 +243,64 @@ void MandelbrotMOO::workPixel(uchar4* ptrColorIJ,int i, int j,int s, const Domai
 
     domaineMath.toXY(i, j, &x, &y); // fill (x,y) from (i,j)
 
-    float n = variateurN.get();
-    ptrMandelbrotMath->colorXY(ptrColorIJ,x, y, domaineMath, n); // in [01]
+    float n = variateurN->get();
+    ptrMandelbrotMath->colorXY(ptrColorIJ, x, y, domaineMath, n); // in [01]
     }
 
-MandelbrotMath* MandelbrotMOO::createMath()
+void MandelbrotMOO::initFractalEx1()
     {
-    //return MandelbrotMath();
-    return new JuliaMath(-0.12, 0.85);
+    int nMin = 12;
+    int nMax = 100;
+    this->variateurN = new VariateurI(IntervalI(nMin, nMax), 1);
+
+    this->mandelbrotMath = new MandelbrotMath();
+    this->domaineMathInit = DomaineMath(-2.1, -1.3, 0.8, 1.3);
+    }
+
+void MandelbrotMOO::initFractalEx2()
+    {
+    int nMin = 30;
+    int nMax = 110;
+    this->variateurN = new VariateurI(IntervalI(nMin, nMax), 1);
+
+    this->mandelbrotMath = new MandelbrotMath();
+    this->domaineMathInit = DomaineMath(-1.3968, -0.03362, -1.3578, 0.0013973);
+    }
+
+void MandelbrotMOO::initFractalEx3()
+    {
+    int nMin = 30;
+    int nMax = 110;
+    float c1 = -0.12f;
+    float c2 = 0.85f;
+    this->variateurN = new VariateurI(IntervalI(nMin, nMax), 1);
+
+    this->mandelbrotMath = new JuliaMath(c1, c2);
+    this->domaineMathInit = DomaineMath(-1.3, -1.4, 1.3, 1.4);
+    }
+
+void MandelbrotMOO::initFractalEx4()
+    {
+    int nMin = 80;
+    int nMax = 300;
+    float c1 = -0.745f;
+    float c2 = 0.1f;
+    this->variateurN = new VariateurI(IntervalI(nMin, nMax), 1);
+
+    this->mandelbrotMath = new JuliaMath(c1, c2);
+    this->domaineMathInit = DomaineMath(-1.7, -1.0, 1.7, 1.0);
+    }
+
+void MandelbrotMOO::initFractalEx5()
+    {
+    int nMin = 15;
+    int nMax = 110;
+    float c1 = -0.52f;
+    float c2 = 0.57f;
+    this->variateurN = new VariateurI(IntervalI(nMin, nMax), 1);
+
+    this->mandelbrotMath = new JuliaMath(c1, c2);
+    this->domaineMathInit = DomaineMath(-1.7, -1.2, 1.7, 1.2);
     }
 
 /*----------------------------------------------------------------------*\

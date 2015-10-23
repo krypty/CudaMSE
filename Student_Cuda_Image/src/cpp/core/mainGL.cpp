@@ -48,7 +48,7 @@ int mainGL(Option& option)
 
     // Viewer : (int,int,boolean) : (px,py,isAnimation=true)
     //Viewer<RipplingProvider> rippling(10, 10);
-    Viewer<MandelbrotProvider> mandelbrot(10, 10);
+    ViewerZoomable<MandelbrotProvider> mandelbrot(10, 10);
     // add here other viewer
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte

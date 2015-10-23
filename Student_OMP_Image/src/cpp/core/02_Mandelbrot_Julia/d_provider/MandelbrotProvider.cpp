@@ -32,20 +32,18 @@
 
 ImageFonctionel* MandelbrotProvider::createGL(void)
     {
-    AnimableFonctionel_I*  ptrMOO=MandelbrotProvider::createMOO();
+    AnimableFonctionel_I* ptrMOO = MandelbrotProvider::createMOO();
 
     return new ImageFonctionel(ptrMOO);
     }
 
 AnimableFonctionel_I* MandelbrotProvider::createMOO(void)
     {
-    int dw = 16 * 60 *2; // =32*30=960
+    int dw = 16 * 60 * 2; // =32*30=960
     int dh = 16 * 60; // =32*30=960
 
-    int nMin = 30;
-    int nMax = 100;
-
-    return new MandelbrotMOO(dw, dh, nMin, nMax);
+    //TODO: personnalisez votre fractal dans MandelbrotMOO !
+    return new MandelbrotMOO(dw, dh);
     }
 
 /*--------------------------------------*\

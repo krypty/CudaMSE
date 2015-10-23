@@ -4,7 +4,7 @@
 #include "cudaTools.h"
 #include "AnimableFonctionel_I.h"
 #include "MathTools.h"
-#include "VariateurF.h"
+#include "VariateurI.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -64,7 +64,7 @@ class Mandelbrot: public AnimableFonctionel_I
 	// Tools
 	dim3 dg;
 	dim3 db;
-	VariateurF variateurN; // varier n
+	VariateurI variateurN; // varier n
 	DomaineMath* ptrDomaineMathInit;
 
 	//Outputs

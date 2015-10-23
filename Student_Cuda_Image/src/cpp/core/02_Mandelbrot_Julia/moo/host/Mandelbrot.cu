@@ -4,10 +4,7 @@
 #include "Device.h"
 #include "MathTools.h"
 
-using cpu::IntervalF;
 using cpu::IntervalI;
-
-
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -17,7 +14,7 @@ using cpu::IntervalI;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-__global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t);
+__global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n);
 
 /*--------------------------------------*\
  |*		Public			*|

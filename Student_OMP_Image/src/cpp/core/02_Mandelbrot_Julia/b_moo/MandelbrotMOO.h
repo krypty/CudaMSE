@@ -22,7 +22,7 @@ class MandelbrotMOO: public AnimableFonctionel_I
 
     public:
 
-	MandelbrotMOO(unsigned int w, unsigned int h, int nMin, int nMax);
+	MandelbrotMOO(unsigned int w, unsigned int h);
 	virtual ~MandelbrotMOO(void);
 
 	/*--------------------------------------*\
@@ -59,7 +59,11 @@ class MandelbrotMOO: public AnimableFonctionel_I
 
 	void workPixel(uchar4* ptrColorIJ, int i, int j, int s, const DomaineMath& domaineMath, MandelbrotMath* ptrMandelbrotMath);
 
-	MandelbrotMath* createMath();
+	void initFractalEx1();
+	void initFractalEx2();
+	void initFractalEx3();
+	void initFractalEx4();
+	void initFractalEx5();
 
 	/*--------------------------------------*\
 	|*		Attribut		*|
@@ -76,8 +80,9 @@ class MandelbrotMOO: public AnimableFonctionel_I
 	string title;
 
 	// Tools
-	VariateurI variateurN; // fait varier para animation t
+	VariateurI* variateurN; // fait varier para animation t
 	ParallelPatern parallelPatern;
+	MandelbrotMath* mandelbrotMath;
     };
 
 #endif 
