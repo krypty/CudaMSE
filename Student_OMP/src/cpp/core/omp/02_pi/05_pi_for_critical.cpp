@@ -45,26 +45,27 @@ bool isPiOMPforCritical_Ok(int n)
  * synchronisation couteuse!
  */
 double piOMPforCritique(int n)
+{
+  const double dx = 1.0 / (double) n; // interval size
+  double sum = 0;
+
+  #pragma omp parallel
+  {
+    double partialSum = 0; // implicitly private to thread
+    #pragma omp for
+    for (int i = 0; i < n; i++)
     {
-    double somme = 0;
-    double dx = 1.0/(double)n;
-    double x;
-
-    // V2
-    #pragma omp parallel for private (x)
-	for(int i = 0; i < n; i++)
-	    {
-	    // V1 : double x = ....
-	    x = i * dx;
-
-	    // pas bon ! n * NB_THREAD / NB_THREAD
-	#pragma omp critical (toto)
-		{
-		somme += fpi(x);
-		}
-	    }
-	return somme/n;
+      partialSum += fpi(i * dx);
     }
+
+    // critical reduction, run one thread at a time
+    #pragma omp critical (reductionId)
+    {
+      sum += partialSum;
+    }
+  }
+  return sum / n;
+}
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
