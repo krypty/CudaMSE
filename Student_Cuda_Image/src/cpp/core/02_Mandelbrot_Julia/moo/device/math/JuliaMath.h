@@ -1,5 +1,5 @@
-#ifndef MANDELBROT_MATH_H_
-#define MANDELBROT_MATH_H_
+#ifndef JULIA_MATH_H_
+#define JULIA_MATH_H_
 
 #include <math.h>
 #include "ColorTools.h"
@@ -13,7 +13,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class MandelbrotMath : public MandelbrotMathBase
+class JuliaMath: public MandelbrotMathBase
     {
 
 	/*--------------------------------------*\
@@ -23,15 +23,17 @@ class MandelbrotMath : public MandelbrotMathBase
     public:
 
 	__device__
-    MandelbrotMath(int n) : MandelbrotMathBase(n)
+    JuliaMath(int n, float c1, float c2) :
+		MandelbrotMathBase(n)
 	    {
-        // nothing
+	    this->c1 = c1;
+	    this->c2 = c2;
 	    }
 
 	__device__
-    virtual ~MandelbrotMath(void)
+    virtual ~JuliaMath(void)
 	    {
-	    //nothing
+	    // nothing
 	    }
 
 	/*--------------------------------------*\
@@ -43,16 +45,16 @@ class MandelbrotMath : public MandelbrotMathBase
 	__device__
 	virtual int getK(float x, float y)
 	    {
-	    float a = 0;
-	    float b = 0;
+	    float a = x;
+	    float b = y;
 
 	    int k = 0;
 
 	    while (!isDivergent(a, b) && k <= this->n)
 		{
 		float aCopy = a;
-		a = (aCopy * aCopy - b * b) + x;
-		b = 2.0 * aCopy * b + y;
+		a = (aCopy * aCopy - b * b) + c1;
+		b = 2.0 * aCopy * b + c2;
 
 		k++;
 		}
@@ -63,6 +65,11 @@ class MandelbrotMath : public MandelbrotMathBase
 	/*--------------------------------------*\
 	|*		Attributs		*|
 	 \*-------------------------------------*/
+
+    private:
+
+	float c1;
+	float c2;
 
     };
 

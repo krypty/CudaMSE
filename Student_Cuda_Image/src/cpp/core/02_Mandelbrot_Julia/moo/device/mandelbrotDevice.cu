@@ -4,8 +4,7 @@
 #include "cudaTools.h"
 #include "Device.h"
 #include "MandelbrotMath.h"
-
-
+#include "JuliaMath.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -19,13 +18,11 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void mandelbrot(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t);
+__global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n);
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
-
-
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -41,12 +38,19 @@ __global__ void mandelbrot(uchar4* ptrDevPixels,int w, int h,DomaineMath domaine
 
 __global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n)
     {
-    MandelbrotMath mandelbrotMath(n);
+    // hiérarchie de classe fonctionnelle
+    // mais polymorphisme (donc en utilisant des pointeurs) non fonctionnel
+
+    //MandelbrotMath mandelbrotMath = MandelbrotMath(n);
+
+    float c1 = -0.12;
+    float c2 = 0.85;
+    JuliaMath mandelbrotMath = JuliaMath(n, c1, c2);
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
 
-    const int WH=w*h;
+    const int WH = w * h;
 
     uchar4 color;
 
@@ -65,17 +69,17 @@ __global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domai
 	// (x,y) domaine math
 	domaineMath.toXY(pixelI, pixelJ, &x, &y); //  (i,j) -> (x,y)
 
-
-	mandelbrotMath.colorXY(&color, x, y, domaineMath, n); // update color
+	mandelbrotMath.colorXY(&color, x, y); // update color
 
 	ptrDevPixels[s] = color;
 
 	s += NB_THREAD;
 	}
 
+    // must be present !
+    //delete mandelbrotMath;
     }
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
-
