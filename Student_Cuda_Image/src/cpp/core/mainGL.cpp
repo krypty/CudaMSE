@@ -11,59 +11,61 @@
 #include "MandelbrotProvider.h"
 #include "NewtonProvider.h"
 #include "RayTracingProvider.h"
+#include "HeatTransfertProvider.h"
 
 using std::cout;
 using std::endl;
 using std::string;
 
 /*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
+|*			Declaration                     *|
+\*---------------------------------------------------------------------*/
 
 /*--------------------------------------*\
- |*		Imported	 	*|
- \*-------------------------------------*/
+|*		Imported	    *|
+\*-------------------------------------*/
 
 /*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+|*		Public			*|
+\*-------------------------------------*/
 
 int mainGL(Option& option);
 
 /*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
+|*		Private			*|
+\*-------------------------------------*/
 
 /*----------------------------------------------------------------------*\
- |*			Implementation 					*|
- \*---------------------------------------------------------------------*/
+|*			Implementation                  *|
+\*---------------------------------------------------------------------*/
 
 /*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+|*		Public			*|
+\*-------------------------------------*/
 
 int mainGL(Option& option)
-    {
-    cout << "\n[OpenGL] mode" << endl;
+{
+        cout << "\n[OpenGL] mode" << endl;
 
-    GLUTImageViewers::init(option.getArgc(), option.getArgv());
+        GLUTImageViewers::init(option.getArgc(), option.getArgv());
 
-    // Viewer : (int,int,boolean) : (px,py,isAnimation=true)
-//    Viewer<RipplingProvider> rippling(10, 10);
-    //ViewerZoomable<MandelbrotProvider> mandelbrot(10, 10);
-    //ViewerZoomable<NewtonProvider> newton(10, 10);
-    Viewer<RayTracingProvider> rayTracing(10, 10);
-    // add here other viewer
+        // Viewer : (int,int,boolean) : (px,py,isAnimation=true)
+        // Viewer<RipplingProvider> rippling(10, 10);
+        // ViewerZoomable<MandelbrotProvider> mandelbrot(10, 10);
+        // ViewerZoomable<NewtonProvider> newton(10, 10);
+        // Viewer<RayTracingProvider> rayTracing(10, 10);
+        Viewer<HeatTransfertProvider> heatTransfert(10, 10);
+        // add here other viewer
 
-    GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
+        GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
-    return EXIT_SUCCESS;
-    }
+        return EXIT_SUCCESS;
+}
 
 /*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
+|*		Private			*|
+\*-------------------------------------*/
 
 /*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/
+|*			End	                    *|
+\*---------------------------------------------------------------------*/
