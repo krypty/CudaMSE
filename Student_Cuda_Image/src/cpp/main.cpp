@@ -47,7 +47,7 @@ int main(int argc, char** argv)
     {
     // Server Cuda1: in [0,5]
     // Server Cuda2: in [0,2]
-    int DEVICE_ID = 0;
+    int DEVICE_ID = 4;
     bool IS_GL = true;
 
     Option option(IS_GL, DEVICE_ID,argc,argv);
