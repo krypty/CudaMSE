@@ -58,10 +58,17 @@ __device__ void secondaire(float* ptrDevV1, float* ptrDevV2, float* ptrDevW,int 
     // Debug
     if (TID==0)
 	{
-	printf("Coucou from device tid&d",TID); //required   Device::synchronize(); after the call of kernel
+	printf("Coucou from device tid=%d",TID); //required   Device::synchronize(); after the call of kernel
 	}
 
    //TODO pattern entrelacement
+    int s = TID;
+    while(s < n)
+	{
+	ptrDevW[s] = ptrDevV1[s] + ptrDevV2[s];
+
+	s += NB_THREAD;
+	}
     }
 
 /*----------------------------------------------------------------------*\

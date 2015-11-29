@@ -47,8 +47,19 @@ Rippling::Rippling(int w, int h, float dt)
     this->dt = dt;
 
     // Tools
-    this->dg = dim3(96, 2, 1);
-    this->db = dim3(128, 4, 1);
+
+//    // Indice2D
+    this->dg = dim3(64*4, 4, 1);
+    this->db = dim3(32*4, 8, 1);
+
+    // Indice1D
+//    this->dg = dim3(512, 1, 1);
+//    this->db = dim3(1024, 1, 1);
+
+//    // pattern 1-1
+//    this->dg = dim3(64, 64, 1);
+//    this->db = dim3(16, 16, 1);
+
     this->t = 0;
 
     // Outputs

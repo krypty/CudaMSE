@@ -41,15 +41,17 @@ __host__ void addVecteur(float* ptrV1, float* ptrV2, float* ptrW, int n)
     float* ptrDevV1 = NULL;
     float* ptrDevV2 = NULL;
     float* ptrDevW = NULL;
+
     size_t size = n * sizeof(float); // octet
 
     HANDLE_ERROR(cudaMalloc(&ptrDevV1, size));
-    // TODO ptrV2 et ptrW
+    HANDLE_ERROR(cudaMalloc(&ptrDevV2, size));
+    HANDLE_ERROR(cudaMalloc(&ptrDevW, size));
 
     HANDLE_ERROR(cudaMemset(ptrDevW, 0, size));
 
     HANDLE_ERROR(cudaMemcpy(ptrDevV1, ptrV1, size, cudaMemcpyHostToDevice));
-    // TODO ptrV2
+    HANDLE_ERROR(cudaMemcpy(ptrDevV2, ptrV2, size, cudaMemcpyHostToDevice));
 
     dim3 dg(16, 2, 1); // disons
     dim3 db(32, 4, 1); // disons
@@ -58,13 +60,15 @@ __host__ void addVecteur(float* ptrV1, float* ptrV2, float* ptrW, int n)
     //Device::print(dg, db);
     Device::checkDimError(dg, db);
 
-    addVecteurGPU<<<dg,db>>>(ptrDevV1, ptrV2, ptrDevW, n); // assynchrone
+    addVecteurGPU<<<dg,db>>>(ptrDevV1, ptrDevV2, ptrDevW, n); // assynchrone
     Device::checkLastCudaError("addVecteur"); // facultatif
     Device::synchronize(); // Temp, only for printf in  GPU
 
-    HANDLE_ERROR(cudaMemcpy(ptrW, ptrDevW, size, cudaMemcpyDeviceToHost)); // barrière synchronisation implicite
+    HANDLE_ERROR(cudaMemcpy(ptrW, ptrDevW, size, cudaMemcpyDeviceToHost)); // barriï¿½re synchronisation implicite
 
     HANDLE_ERROR(cudaFree(ptrDevV1));
+    HANDLE_ERROR(cudaFree(ptrDevV2));
+    HANDLE_ERROR(cudaFree(ptrDevW));
     // TODO ptrV2 et ptrW
     }
 

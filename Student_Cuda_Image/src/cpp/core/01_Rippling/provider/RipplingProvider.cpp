@@ -33,8 +33,8 @@ Rippling* RipplingProvider::createMOO()
     {
     float dt = 1;
 
-    int dw = 16 * 60; // =32*30=960
-    int dh = 16 * 60; // =32*30=960
+    int dw = 64*16; // =32*30=960
+    int dh = 64*16; // =32*30=960
 
     return new Rippling(dw, dh, dt);
     }
