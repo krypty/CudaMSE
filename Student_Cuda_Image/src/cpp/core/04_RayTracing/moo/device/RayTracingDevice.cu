@@ -6,7 +6,7 @@
 #include "Sphere.h"
 
 // on fait des define car conditions ne bougent plus à l'exécution et c'est plus performant que les IF qui doivent être évalués à chaque itération
-// Il doit y avoir une seule valeur a true possible
+// Il ne peut y avoir qu'une seule valeur a true possible
 #define USE_GM false
 #define USE_CM false
 #define USE_SM true
