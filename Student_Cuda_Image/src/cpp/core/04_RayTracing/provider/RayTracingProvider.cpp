@@ -1,20 +1,5 @@
-#include <iostream>
-#include <stdlib.h>
-#include <string.h>
-
-#include "GLUTImageViewers.h"
-#include "Option.h"
-#include "Viewer.h"
-#include "ViewerZoomable.h"
-
-#include "RipplingProvider.h"
-#include "MandelbrotProvider.h"
-#include "NewtonProvider.h"
 #include "RayTracingProvider.h"
-
-using std::cout;
-using std::endl;
-using std::string;
+#include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -28,8 +13,6 @@ using std::string;
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainGL(Option& option);
-
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
@@ -42,22 +25,24 @@ int mainGL(Option& option);
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainGL(Option& option)
+/*-----------------*\
+ |*	static	   *|
+ \*----------------*/
+
+RayTracing* RayTracingProvider::create()
     {
-    cout << "\n[OpenGL] mode" << endl;
+    int dw = 1280 ; // =32*30=960
+    int dh = 720; // =32*30=960
 
-    GLUTImageViewers::init(option.getArgc(), option.getArgv());
+    float dt = 60.0f / 1000.0f;
+    int nSphere = 50;
 
-    // Viewer : (int,int,boolean) : (px,py,isAnimation=true)
-//    Viewer<RipplingProvider> rippling(10, 10);
-    //ViewerZoomable<MandelbrotProvider> mandelbrot(10, 10);
-    //ViewerZoomable<NewtonProvider> newton(10, 10);
-    Viewer<RayTracingProvider> rayTracing(10, 10);
-    // add here other viewer
+    return new RayTracing(dw, dh, nSphere, dt);
+    }
 
-    GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
-
-    return EXIT_SUCCESS;
+Image* RayTracingProvider::createGL(void)
+    {
+    return new Image(create());
     }
 
 /*--------------------------------------*\
