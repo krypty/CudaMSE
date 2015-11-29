@@ -45,7 +45,9 @@ __global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domai
 
     float c1 = -0.12;
     float c2 = 0.85;
-    JuliaMath mandelbrotMath = JuliaMath(n, c1, c2);
+    MandelbrotMathBase* mandelbrotMath = new JuliaMath(n, c1, c2);
+
+//    MandelbrotMathBase* mandelbrotMath = new MandelbrotMath(n);
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
@@ -69,7 +71,7 @@ __global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domai
 	// (x,y) domaine math
 	domaineMath.toXY(pixelI, pixelJ, &x, &y); //  (i,j) -> (x,y)
 
-	mandelbrotMath.colorXY(&color, x, y); // update color
+	mandelbrotMath->colorXY(&color, x, y); // update color
 
 	ptrDevPixels[s] = color;
 
@@ -77,7 +79,7 @@ __global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domai
 	}
 
     // must be present !
-    //delete mandelbrotMath;
+    delete mandelbrotMath;
     }
 
 /*----------------------------------------------------------------------*\
