@@ -1,5 +1,8 @@
+#include "Saucisson.h"
+#include "ReductionTools.h"
 #include <iostream>
 #include <stdlib.h>
+#include "Device.h"
 
 
 using std::cout;
@@ -9,25 +12,51 @@ using std::endl;
 |*			Declaration                     *|
 \*---------------------------------------------------------------------*/
 
-/*--------------------------------------*\
-|*		Imported	    *|
-\*-------------------------------------*/
-
-extern bool useHello(void);
-extern bool useAddVecteur(void);
-extern bool useSaucisson(void);
+extern __global__ void saucissonDevice(float* ptrDevResult,int nbSaucisson,int n);
 
 /*--------------------------------------*\
 |*		Public			*|
 \*-------------------------------------*/
+Saucisson::Saucisson(int nbSaucisson)
+{
+        this->nbSaucisson = nbSaucisson;
 
-int mainCore();
+        this->n = 1024;
+        this->sizeSM = n*sizeof(float);
+        memoryManagement();
+        this->dg = dim3(10,1,1);
+        this->db = dim3(1,1,1);
+
+}
+Saucisson::~Saucisson()
+{
+        HANDLE_ERROR(cudaFree(ptrDevResult));
+        ptrDevResult=NULL;
+}
+
+void Saucisson::process()
+{
+        saucissonDevice<<<dg,db,sizeSM>>>(ptrDevResult,nbSaucisson,n);
+        Device::synchronize();
+        HANDLE_ERROR(cudaMemcpy(&pi,ptrDevResult,sizePI,cudaMemcpyDeviceToHost));
+}
 
 /*--------------------------------------*\
 |*		Private			*|
 \*-------------------------------------*/
 
+void Saucisson::memoryManagement()
+{
+        ptrDevResult = NULL;
+        sizePI = sizeof(float);
+        HANDLE_ERROR(cudaMalloc(&ptrDevResult,sizePI));
 
+        HANDLE_ERROR(cudaMemset(ptrDevResult,0,sizePI));
+}
+float Saucisson::getPi()
+{
+        return pi/nbSaucisson;
+}
 
 /*----------------------------------------------------------------------*\
 |*			Implementation                  *|
@@ -37,24 +66,9 @@ int mainCore();
 |*		Public			*|
 \*-------------------------------------*/
 
-int mainCore()
-{
-        bool isOk = true;
-        isOk &= useHello();
-        isOk &= useAddVecteur();
-        isOk &= useSaucisson();
-
-        cout << "\nisOK = " << isOk << endl;
-        cout << "\nEnd : mainCore" << endl;
-
-        return isOk ? EXIT_SUCCESS : EXIT_FAILURE;
-}
-
 /*--------------------------------------*\
 |*		Private			*|
 \*-------------------------------------*/
-
-
 
 /*----------------------------------------------------------------------*\
 |*			End	                    *|
