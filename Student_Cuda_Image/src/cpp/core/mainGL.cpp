@@ -51,9 +51,9 @@ int mainGL(Option& option)
 
         // Viewer : (int,int,boolean) : (px,py,isAnimation=true)
         // Viewer<RipplingProvider> rippling(10, 10);
-        ViewerZoomable<MandelbrotProvider> mandelbrot(10, 10);
+        // ViewerZoomable<MandelbrotProvider> mandelbrot(10, 10);
         // ViewerZoomable<NewtonProvider> newton(10, 10);
-        // Viewer<RayTracingProvider> rayTracing(10, 10);
+        Viewer<RayTracingProvider> rayTracing(10, 10);
         // Viewer<HeatTransfertProvider> heatTransfert(10, 10);
         // add here other viewer
 

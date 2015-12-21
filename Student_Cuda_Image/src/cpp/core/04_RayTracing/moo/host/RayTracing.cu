@@ -9,11 +9,13 @@
 
 using cpu::IntervalI;
 
-// on fait des define car conditions ne bougent plus à l'exécution et c'est plus performant que les IF qui doivent être évalués à chaque itération
-// Il doit y avoir une seule valeur a true possible
-#define USE_GM false
+/* on fait des define car conditions ne bougent plus à l'exécution et c'est plus performant que les IF qui doivent être évalués à chaque itération
+ * Ces valeurs doivent être cohérente avec celles présentes dans RayTracingDevice.cu
+*/
+//TODO PROF: jouer avec ces valeurs. Attention: Il doit y avoir une seule et unique valeur a true.
+#define USE_GM true
 #define USE_CM false
-#define USE_SM true
+#define USE_SM false
 
 #define LENGTH 1000
 __constant__ Sphere TAB_DATA_CM[LENGTH];
