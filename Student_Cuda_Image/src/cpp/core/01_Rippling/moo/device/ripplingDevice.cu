@@ -12,69 +12,68 @@ using std::cout;
 using std::endl;
 
 /*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
+|*			Declaration                     *|
+\*---------------------------------------------------------------------*/
 
 /*--------------------------------------*\
- |*		Imported	 	*|
- \*-------------------------------------*/
+|*		Imported	    *|
+\*-------------------------------------*/
 
 /*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+|*		Public			*|
+\*-------------------------------------*/
 
 __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
 
 /*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
+|*		Private			*|
+\*-------------------------------------*/
 
 /*----------------------------------------------------------------------*\
- |*			Implementation 					*|
- \*---------------------------------------------------------------------*/
+|*			Implementation                  *|
+\*---------------------------------------------------------------------*/
 
 /*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+|*		Public			*|
+\*-------------------------------------*/
 
 /*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
+|*		Private			*|
+\*-------------------------------------*/
 
 __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t)
-    {
-    RipplingMath ripplingMath = RipplingMath(w, h);
+{
+        RipplingMath ripplingMath = RipplingMath(w, h);
 
-    // TODO pattern entrelacement
+        // TODO pattern entrelacement
 
-    // Indice2D
-    const int NB_THREAD = Indice2D::nbThread();
-    int TID = Indice2D::tid();
+        // Indice2D
+        const int NB_THREAD = Indice2D::nbThread();
+        int TID = Indice2D::tid();
 
-    // Indice1D
+//// Indice1D
 //    const int NB_THREAD = Indice1D::nbThread();
 //    int TID = Indice1D::tid();
 
-    // 1-1
+//// 1-1
 //    const int NB_THREAD = (64*16) * (64*16);
 
+        int s = TID;
+        const int WH = w*h;
 
-    int s = TID;
-    const int WH = w*h;
+        while(s < WH)
+        {
+                int i = 0;
+                int j = 0;
+                uchar4 color;
 
-    while(s < WH)
-	{
-	int i = 0;
-	int j = 0;
-	uchar4 color;
+                IndiceTools::toIJ(s, w, &i, &j);
 
-	IndiceTools::toIJ(s, w, &i, &j);
+                ripplingMath.colorIJ(i, j, t, &color);
+                ptrDevPixels[s] = color;
 
-	ripplingMath.colorIJ(i, j, t, &color);
-	ptrDevPixels[s] = color;
-
-	s += NB_THREAD;
-	}
+                s += NB_THREAD;
+        }
 
 
 //	uchar4 color;
@@ -84,10 +83,9 @@ __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t)
 //	int s = i * w + j;
 //	ripplingMath.colorIJ(i, j, t, &color);
 //	ptrDevPixels[s] = color;
-    }
+}
 
 
 /*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/
-
+|*			End	                    *|
+\*---------------------------------------------------------------------*/

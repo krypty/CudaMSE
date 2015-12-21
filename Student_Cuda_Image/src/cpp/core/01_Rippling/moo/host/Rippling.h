@@ -6,72 +6,73 @@
 #include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
+|*			Declaration                     *|
+\*---------------------------------------------------------------------*/
 
 /*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+|*		Public			*|
+\*-------------------------------------*/
 
-class Rippling: public Animable_I
-    {
-	/*--------------------------------------*\
-	|*		Constructor		*|
-	 \*-------------------------------------*/
+class Rippling : public Animable_I
+{
+/*--------------------------------------*\
+|*		Constructor		*|
+\*-------------------------------------*/
 
-    public:
+public:
 
-	Rippling(int w, int h, float dt);
-	virtual ~Rippling(void);
+        Rippling(int w, int h, float dt, dim3 dg, dim3 db);
+        Rippling(int w, int h, float dt);
+        virtual ~Rippling(void);
 
-	/*--------------------------------------*\
-	 |*		Methodes		*|
-	 \*-------------------------------------*/
+/*--------------------------------------*\
+|*		Methodes		*|
+\*-------------------------------------*/
 
-    public:
+public:
 
-	/*-------------------------*\
-	|*   Override Animable_I   *|
-	 \*------------------------*/
+/*-------------------------*\
+|*   Override Animable_I   *|
+\*------------------------*/
 
-	/**
-	 * Call periodicly by the api
-	 */
-	virtual void process(uchar4* ptrDevPixels, int w, int h);
-	/**
-	 * Call periodicly by the api
-	 */
-	virtual void animationStep();
+/**
+ * Call periodicly by the api
+ */
+        virtual void process(uchar4* ptrDevPixels, int w, int h);
+/**
+ * Call periodicly by the api
+ */
+        virtual void animationStep();
 
-	virtual float getAnimationPara();
-	virtual string getTitle();
-	virtual int getW();
-	virtual int getH();
+        virtual float getAnimationPara();
+        virtual string getTitle();
+        virtual int getW();
+        virtual int getH();
 
-    private:
+private:
 
-	/*--------------------------------------*\
-	 |*		Attributs		*|
-	 \*-------------------------------------*/
+/*--------------------------------------*\
+|*		Attributs		*|
+\*-------------------------------------*/
 
-    private:
+private:
 
-	// Inputs
-	int w;
-	int h;
-	float dt;
+// Inputs
+        int w;
+        int h;
+        float dt;
+        dim3 dg;
+        dim3 db;
 
-	// Tools
-	dim3 dg;
-	dim3 db;
-	float t;
+// Tools
+        float t;
 
-	//Outputs
-	string title;
-    };
+//Outputs
+        string title;
+};
 
 #endif
 
 /*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/
+|*			End	                    *|
+\*---------------------------------------------------------------------*/
