@@ -24,7 +24,7 @@ Saucisson::Saucisson(int nbSaucisson)
         this->n = 1024;
         this->sizeSM = n*sizeof(float);
         memoryManagement();
-        this->dg = dim3(10,1,1);
+        this->dg = dim3(64,1,1);
         this->db = dim3(1,1,1);
 
 }

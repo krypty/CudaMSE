@@ -16,6 +16,7 @@ using std::endl;
 extern bool useHello(void);
 extern bool useAddVecteur(void);
 extern bool useSaucisson(void);
+extern bool useMonteCarlo(void);
 
 /*--------------------------------------*\
 |*		Public			*|
@@ -43,6 +44,7 @@ int mainCore()
         isOk &= useHello();
         isOk &= useAddVecteur();
         isOk &= useSaucisson();
+        isOk &= useMonteCarlo();
 
         cout << "\nisOK = " << isOk << endl;
         cout << "\nEnd : mainCore" << endl;

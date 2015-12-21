@@ -2,7 +2,7 @@
 #include <limits.h>
 #include <math.h>
 #include "MathTools.h"
-#include "Saucisson.h"
+#include "MonteCarlo.h"
 
 using std::cout;
 using std::endl;
@@ -19,13 +19,11 @@ using std::endl;
 |*		Public			*|
 \*-------------------------------------*/
 
-bool useSaucisson(void);
+bool useMonteCarlo(void);
 
 /*--------------------------------------*\
 |*		Private			*|
 \*-------------------------------------*/
-
-
 
 /*----------------------------------------------------------------------*\
 |*			Implementation                  *|
@@ -37,21 +35,21 @@ bool useSaucisson(void);
 
 
 
-bool useSaucisson(void)
+bool useMonteCarlo(void)
 {
-        cout << endl << "[Saucisson]" << endl;
+        cout << endl << "[MonteCarlo]" << endl;
 
-        bool isOk = true;
+        bool isOK = true;
 
-        int n = INT_MAX/500;
-        Saucisson saucisson(n);
-        saucisson.process();
+        int n = INT_MAX/100;
+        MonteCarlo mc(n);
+        mc.process();
 
-        cout << "saucisson pi: " << saucisson.getPi() << endl;
+        cout << "MonteCarlo pi: " << mc.getPi() << endl;
 
-        isOk &= MathTools::isEquals(saucisson.getPi(), M_PI, 1e-3);
+        isOK &= MathTools::isEquals(mc.getPi(), M_PI, 1e-3);
 
-        return true;
+        return isOK;
 }
 
 /*--------------------------------------*\

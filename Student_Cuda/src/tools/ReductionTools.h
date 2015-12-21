@@ -23,7 +23,7 @@ ReductionTools(int n)
 __device__
 virtual ~ReductionTools()
 {
-
+        // nothing
 }
 __device__
 void reduction(Tinput* tabSM,Toutput* ptrDevResult)
