@@ -9,8 +9,8 @@
  * Ces valeurs doivent être cohérente avec celles présentes dans RayTracing.cu
 */
 //TODO PROF: jouer avec ces valeurs. Attention: Il doit y avoir une seule et unique valeur a true.
-#define USE_GM false
-#define USE_CM true
+#define USE_GM true
+#define USE_CM false
 #define USE_SM false
 
 /*----------------------------------------------------------------------*\
