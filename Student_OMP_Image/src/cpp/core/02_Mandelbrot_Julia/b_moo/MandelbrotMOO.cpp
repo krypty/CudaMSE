@@ -43,7 +43,7 @@ MandelbrotMOO::MandelbrotMOO(unsigned int w, unsigned int h)
     this->w = w;
     this->h = h;
 
-    /* décommenter un des ces exemples pour changer de fractal (Mandelbrot ou Julia)
+    /* TODO PROF: décommenter un des ces exemples pour changer de fractal (Mandelbrot ou Julia)
      Ces exemples correspondent au PDF 06_TP_MandelBrot_Julia_006.pdf.
      */
 //    initFractalEx1();

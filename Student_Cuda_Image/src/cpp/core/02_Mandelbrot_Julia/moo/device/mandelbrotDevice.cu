@@ -38,15 +38,14 @@ __global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domai
 
 __global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n)
     {
-    // hiérarchie de classe fonctionnelle
-    // mais polymorphisme (donc en utilisant des pointeurs) non fonctionnel
-
-    //MandelbrotMath mandelbrotMath = MandelbrotMath(n);
+    // hiérarchie de classe et polymorphisme (donc en utilisant des pointeurs) fonctionnels
 
     float c1 = -0.12;
     float c2 = 0.85;
-    MandelbrotMathBase* mandelbrotMath = new JuliaMath(n, c1, c2);
 
+    //TODO PROF: commenter ou décommenter pour passer de Mandelbrot à Julia ou vice versa
+    //TODO PROF: voir version OpenMP pour tous les autres représentations de fractales
+    MandelbrotMathBase* mandelbrotMath = new JuliaMath(n, c1, c2);
 //    MandelbrotMathBase* mandelbrotMath = new MandelbrotMath(n);
 
     const int TID = Indice2D::tid();
