@@ -30,8 +30,6 @@ __global__ void monteCarloDevice(int* ptrDevResult, curandState* ptrDevTabGenera
         peuplerSharedMemory(tabSM, ptrDevTabGeneratorThread, nbDarts);
         __syncthreads();
         reductionTools.reduction(tabSM, ptrDevResult);
-        __syncthreads();
-        const int TID = Indice1D::tid();
 }
 
 __device__ void initSharedMemory(int* tabSM, int n)

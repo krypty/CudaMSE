@@ -19,17 +19,15 @@ public:
     void process();
     float getPi();
     virtual ~MonteCarlo();
-private:
-    void memoryManagement();
 
 private:
     int nbDarts;
     int n;
+    int nbDevices;
     dim3 dg;
     dim3 db;
     size_t sizePI;
     size_t sizeSM;
-    int resultatInter;
     int piInter;
     float pi;
     int** ptrDevResult;

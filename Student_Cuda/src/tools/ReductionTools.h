@@ -58,7 +58,7 @@ void ecrasement(Tinput* tabSM, int moitier)
 {
         //devrait utiliser Indice1D
         const int THREAD_LOCAL_ID =Indice1D::tidLocal();
-        const int NB_THREAD_LOCAL= Indice1D::nbThread();
+        const int NB_THREAD_LOCAL= Indice1D::nbThreadBlock();
         int s=THREAD_LOCAL_ID;
         while(s<moitier)
         {
