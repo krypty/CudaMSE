@@ -12,7 +12,7 @@ using std::endl;
 |*			Declaration                     *|
 \*---------------------------------------------------------------------*/
 
-extern __global__ void monteCarloDevice(float* ptrDevResult,curandState* ptrDevTabGeneratorThread,int nbDarts,int n);
+extern __global__ void monteCarloDevice(int* ptrDevResult,curandState* ptrDevTabGeneratorThread,int nbDarts,int n);
 extern __global__ void setup_kernel_rand(curandState* ptrDevTabGeneratorThread, int deviceId);
 
 /*--------------------------------------*\
@@ -22,14 +22,16 @@ extern __global__ void setup_kernel_rand(curandState* ptrDevTabGeneratorThread, 
 MonteCarlo::MonteCarlo(int nbDarts)
 {
         this->nbDarts = nbDarts;
-        this->n = 1;
-        this->sizeSM = n*sizeof(float);
+        this->n = 1024;
+        this->sizeSM = n*sizeof(int);
         memoryManagement();
         this->dg = dim3(64,1,1);
         this->db = dim3(1,1,1);
+        this->piInter = 0;
+        this->pi = 0;
 
         ptrDevTabGeneratorThread = new curandState*[Device::getDeviceCount()];
-        ptrDevResult = new float*[Device::getDeviceCount()];
+        ptrDevResult = new int*[Device::getDeviceCount()];
 
         size_t generatorSize = sizeof(curandState) * n;
         for(int i = 0; i < Device::getDeviceCount(); i++)
@@ -52,18 +54,20 @@ MonteCarlo::~MonteCarlo()
 
 void MonteCarlo::process()
 {
+	// chaque GPU va calculer pi et on renverra finalement la moyenne de chaque Pi calculé par tous les GPU
         int nbDevices = Device::getDeviceCount();
+
 #pragma omp parallel for
         for(int i = 0; i < nbDevices; i++)
         {
-                float tmp;
+                int tmp;
                 HANDLE_ERROR(cudaSetDevice(i));
                 monteCarloDevice<<<dg, db, sizeSM>>>(ptrDevResult[i], ptrDevTabGeneratorThread[i], nbDarts / nbDevices, n);
                 HANDLE_ERROR(cudaMemcpy(&tmp, ptrDevResult[i], sizePI, cudaMemcpyDeviceToHost));
     #pragma omp atomic
-                pi += tmp;
+                piInter += tmp;
         }
-        pi /= (float)nbDevices;
+        pi = 4.0f * piInter /((float)nbDarts);
 }
 
 /*--------------------------------------*\

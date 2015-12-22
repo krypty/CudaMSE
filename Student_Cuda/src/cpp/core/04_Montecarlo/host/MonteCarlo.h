@@ -30,8 +30,9 @@ private:
     size_t sizePI;
     size_t sizeSM;
     int resultatInter;
+    int piInter;
     float pi;
-    float** ptrDevResult;
+    int** ptrDevResult;
     curandState** ptrDevTabGeneratorThread;
 };
 

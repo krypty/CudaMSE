@@ -12,7 +12,7 @@
 |*			Declaration                     *|
 \*---------------------------------------------------------------------*/
 
-__global__ void monteCarloDevice(float* ptrDevResult, curandState* ptrDevTabGeneratorThread, int nbDarts, int n);
+__global__ void monteCarloDevice(int* ptrDevResult, curandState* ptrDevTabGeneratorThread, int nbDarts, int n);
 __device__ void initSharedMemory(int* tabSM, int n);
 __device__ void peuplerSharedMemory(int* tabSM, curandState* ptrDevTabGeneratorThread, int nbDarts);
 
@@ -20,11 +20,11 @@ __device__ void peuplerSharedMemory(int* tabSM, curandState* ptrDevTabGeneratorT
 |*		Public			*|
 \*-------------------------------------*/
 
-__global__ void monteCarloDevice(float* ptrDevResult, curandState* ptrDevTabGeneratorThread,  int nbDarts, int n)
+__global__ void monteCarloDevice(int* ptrDevResult, curandState* ptrDevTabGeneratorThread,  int nbDarts, int n)
 {
         extern __shared__ int tabSM[];
 
-        ReductionTools<int, float> reductionTools = ReductionTools<int, float>(n);
+        ReductionTools<int, int> reductionTools = ReductionTools<int, int>(n);
         initSharedMemory(tabSM, n);
         __syncthreads();
         peuplerSharedMemory(tabSM, ptrDevTabGeneratorThread, nbDarts);
@@ -32,13 +32,8 @@ __global__ void monteCarloDevice(float* ptrDevResult, curandState* ptrDevTabGene
         reductionTools.reduction(tabSM, ptrDevResult);
         __syncthreads();
         const int TID = Indice1D::tid();
-
-        if(TID==0)
-        {
-                *ptrDevResult = (*ptrDevResult / (float)nbDarts) * 4.0f;
-        }
-
 }
+
 __device__ void initSharedMemory(int* tabSM, int n)
 {
         const int TID_LOCAL = Indice1D::tidLocal();

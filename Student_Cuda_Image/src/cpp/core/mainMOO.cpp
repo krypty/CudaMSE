@@ -65,7 +65,7 @@ int mainFreeGL(Option& option)
 			dim3(128, 1, 1),
 			dim3(64, 4, 1),
 			dim3(128, 4, 1),
-			dim3(128, 1, 1)
+			dim3(512, 1, 1)
 		};
 
 		for(int i = 0; i < DGDB_LENGTH; i++)
