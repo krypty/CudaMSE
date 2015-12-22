@@ -12,6 +12,7 @@
 #include "NewtonProvider.h"
 #include "RayTracingProvider.h"
 #include "HeatTransfertProvider.h"
+#include "MandelbrotProviderMGPU.h"
 
 using std::cout;
 using std::endl;
@@ -53,8 +54,9 @@ int mainGL(Option& option)
         // Viewer<RipplingProvider> rippling(10, 10);
         // ViewerZoomable<MandelbrotProvider> mandelbrot(10, 10);
         // ViewerZoomable<NewtonProvider> newton(10, 10);
-        Viewer<RayTracingProvider> rayTracing(10, 10);
+//        Viewer<RayTracingProvider> rayTracing(10, 10);
         // Viewer<HeatTransfertProvider> heatTransfert(10, 10);
+         ViewerZoomable<MandelbrotProvider> mjProvider(10, 10);
         // add here other viewer
 
         GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte

@@ -41,7 +41,7 @@ bool useMonteCarlo(void)
 
         bool isOK = true;
 
-        int n = INT_MAX/100;
+        int n = INT_MAX;
         MonteCarlo mc(n);
         mc.process();
 
