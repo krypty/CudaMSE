@@ -66,10 +66,11 @@ class MandelbrotMGPU: public AnimableFonctionel_I
 	dim3 db;
 	VariateurI variateurN; // varier n
 	DomaineMath* ptrDomaineMathInit;
-    uchar4* ptrDevBottomImage0;
+	uchar4* ptrDevBottomImage0;
 	uchar4* ptrDevTab1;
-    size_t size;
-    int deviceID;
+	size_t size;
+	int deviceID;
+	int deviceIDBottom;
 
 	//Outputs
 	string title;
