@@ -31,8 +31,10 @@
 
 RayTracing* RayTracingProvider::create()
     {
-    int dw = 1280 ; // =32*30=960
-    int dh = 720; // =32*30=960
+//    int dw = 1280 ; // =32*30=960
+//    int dh = 720; // =32*30=960
+    int dw = 400;
+    int dh = 350;
 
     float dt = 60.0f / 1000.0f;
     int nSphere = 50;

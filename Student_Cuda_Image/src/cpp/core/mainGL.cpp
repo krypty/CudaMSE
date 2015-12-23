@@ -56,7 +56,7 @@ int mainGL(Option& option)
         // ViewerZoomable<NewtonProvider> newton(10, 10);
 //        Viewer<RayTracingProvider> rayTracing(10, 10);
         // Viewer<HeatTransfertProvider> heatTransfert(10, 10);
-         ViewerZoomable<MandelbrotProvider> mjProvider(10, 10);
+         ViewerZoomable<MandelbrotProviderMGPU> mandelbrotMGPU(10, 10);
         // add here other viewer
 
         GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte

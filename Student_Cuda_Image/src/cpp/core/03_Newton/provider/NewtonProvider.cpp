@@ -31,8 +31,11 @@
 
 Newton* NewtonProvider::create()
     {
-    int dw = 16 * 60 *2 ; // =32*30=960
-    int dh = 16 * 60; // =32*30=960
+//    int dw = 16 * 60 *2 ; // =32*30=960
+//    int dh = 16 * 60; // =32*30=960
+    int dw = 400;
+    int dh = 350;
+
 
     float dt = 2 * PI / 8000;
 
