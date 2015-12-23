@@ -13,9 +13,9 @@ using cpu::IntervalI;
  * Ces valeurs doivent être cohérente avec celles présentes dans RayTracingDevice.cu
 */
 //TODO PROF: jouer avec ces valeurs. Attention: Il doit y avoir une seule et unique valeur a true.
-#define USE_GM true
+#define USE_GM false
 #define USE_CM false
-#define USE_SM false
+#define USE_SM true
 
 #define LENGTH 1000
 __constant__ Sphere TAB_DATA_CM[LENGTH];

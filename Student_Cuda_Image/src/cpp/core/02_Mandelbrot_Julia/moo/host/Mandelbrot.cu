@@ -43,8 +43,8 @@ Mandelbrot::Mandelbrot(int w, int h, int nMin, int nMax) :
     this->w = w;
     this->h = h;
 
-    //this->ptrDomaineMathInit=DomaineMath(-2.1, -1.3, 0.8, 1.3); // Mandelbrot
-    this->ptrDomaineMathInit = new DomaineMath(-1.3, -1.4, 1.4, 1.3); // Julia
+    this->ptrDomaineMathInit = new DomaineMath(-2.1, -1.3, 0.8, 1.3); // Mandelbrot
+//    this->ptrDomaineMathInit = new DomaineMath(-1.3, -1.4, 1.4, 1.3); // Julia
 
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser

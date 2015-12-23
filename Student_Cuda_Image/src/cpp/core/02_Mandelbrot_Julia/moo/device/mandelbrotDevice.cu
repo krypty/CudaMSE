@@ -45,8 +45,8 @@ __global__ void mandelbrot(uchar4* ptrDevPixels, int w, int h, DomaineMath domai
 
     //TODO PROF: commenter ou décommenter pour passer de Mandelbrot à Julia ou vice versa
     //TODO PROF: voir version OpenMP pour tous les autres représentations de fractales
-    MandelbrotMathBase* mandelbrotMath = new JuliaMath(n, c1, c2);
-//    MandelbrotMathBase* mandelbrotMath = new MandelbrotMath(n);
+//    MandelbrotMathBase* mandelbrotMath = new JuliaMath(n, c1, c2);
+    MandelbrotMathBase* mandelbrotMath = new MandelbrotMath(n);
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();

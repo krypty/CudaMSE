@@ -13,8 +13,8 @@ using std::endl;
 |*		Imported	    *|
 \*-------------------------------------*/
 
-extern bool useHello(void);
-extern bool useAddVecteur(void);
+//extern bool useHello(void);
+//extern bool useAddVecteur(void);
 extern bool useSaucisson(void);
 extern bool useMonteCarlo(void);
 
@@ -41,8 +41,8 @@ int mainCore();
 int mainCore()
 {
         bool isOk = true;
-        isOk &= useHello();
-        isOk &= useAddVecteur();
+//        isOk &= useHello();
+//        isOk &= useAddVecteur();
         isOk &= useSaucisson();
         isOk &= useMonteCarlo();
 
