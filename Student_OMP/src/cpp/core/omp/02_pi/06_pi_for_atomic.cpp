@@ -45,25 +45,30 @@ bool isPiOMPforAtomic_Ok(int n)
  * synchronisation couteuse!
  */
 double piOMPforAtomic(int n)
+{ // 1 set global variables, NB_THREADS, etc.
+  double sum = 0;
+  const double dx = 1.0 / (double) n;
+
+  // 2 set parallel region with thread-local variables
+  #pragma omp parallel
+  {
+    double partialSum = 0; // implicitly thread-private
+
+    // 3 do some parallel computations
+    #pragma omp for
+    for (int i = 0; i < n ; i++)
     {
-    double somme = 0;
-    double dx = 1.0/(double)n;
-    double x;
-
-    // V2
-    #pragma omp parallel for private (x)
-	for(int i = 0; i < n; i++)
-	    {
-	    // V1 : double x = ....
-	    x = i * dx;
-
-	    // pas bon ! n * NB_THREAD / NB_THREAD
-	    // mais quand meme meilleur que critical for car fpi(x) est fait en parallel et += séquentiellement
-	#pragma omp atomic
-		somme += fpi(x);
-	    }
-	return somme/n;
+      partialSum += fpi ( i * dx );
     }
+
+    /* 4 reduce partial results (atomic)
+     *   atomic reduction are sequential for read-add-write
+     */
+    #pragma omp atomic
+    sum += partialSum;
+  }
+  return sum / n;
+}
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
